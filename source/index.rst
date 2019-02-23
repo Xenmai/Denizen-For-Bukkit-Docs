@@ -37,9 +37,16 @@ Contents
 .. toctree::
     :maxdepth: 2
     :titlesonly:
+    :caption: Do It Yourself
+
+    docs/example-projects/index
+
+.. toctree::
+    :maxdepth: 2
+    :titlesonly:
     :caption: References
 
-    docs/glossary
+    docs/glossary    
 
 Updates to This Text Tutorial
 =============================

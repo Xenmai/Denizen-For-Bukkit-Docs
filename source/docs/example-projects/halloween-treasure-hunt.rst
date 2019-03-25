@@ -1,6 +1,6 @@
-=======================
-Halloween Treasure Hunt
-=======================
+==========================
+1. Halloween Treasure Hunt
+==========================
 
 .. contents:: Table of Contents
     :local:
@@ -8,8 +8,7 @@ Halloween Treasure Hunt
 Introduction
 ============
 
-Welcome back to the **Denizen-for-Bukkit Docs**. This is our first example project, so we'll start with the basics. 
-This guide will cover the following topics:
+In this first example project, we'll start with the basics. The following topics will be covered:
 
 * Denizen objects and general syntax.
 * Browsing through the documentation.
@@ -25,7 +24,7 @@ If you are not familiar with any of the concepts listed, we suggest revisiting t
 * :doc:`Section 2.1 - An Introduction to Tags </docs/basics-of-scripting/an-introduction-to-tags>`
 * :doc:`Section 2.2 - The Basics of Denizen Commands </docs/basics-of-scripting/basics-of-denizen-commands>`
 * :doc:`Section 2.7 - Your First World Script </docs/basics-of-scripting/your-first-world-script>`
-* foreach loops here
+* **[TODO: Add FOREACH section reference]**
 
 This will help you make a better use of this example project, and follow its contents successfully.
 
@@ -34,8 +33,8 @@ This will help you make a better use of this example project, and follow its con
     another tab while scripting this project, as we'll need to check the syntax of events, commands and tags very 
     often.
 
-First Steps
-===========
+1. First Steps
+==============
 
 Now let's jump (or slowly crawl) into the scripting process. In our case, we want to make a **Halloween Treasure 
 Hunt** event in our *Hub world*. We plan on manually placing some hidden pumpkins ourselves, and reward players for 
@@ -43,35 +42,28 @@ finding (and left clicking) them.
 
 First of all, we'll need to create a *new script file* (for example ``Halloween_Treasure_Hunt.yml``) and build a world 
 script container which, as we know, will listen to events happening within our server. We just have to give it a name, 
-like ``Halloween_Treasure_Hunt``, and set the ``type:`` key to ``world``. In addition to this, we'll also enable debug 
-by setting the ``debug:`` key to ``true``. This will make our script print in the console everything it does and help 
-us solve errors. It is not needed, so we can just disable it later on. We'll now add an ``events:`` subkey, which will 
-in the end hold the executable code we're going to write.
+like ``Halloween_Treasure_Hunt``, and set the ``type:`` key to ``world``. In addition to this, we'll also add an 
+``events:`` subkey, which will in the end hold the executable code we're going to write.
 
 Our file with the script container looks like this:
 
 .. code-block:: dscript
-    :name: figure_1_1
+    :name: figureDIY_1_1
     :linenos:
-    :emphasize-lines: 1-4
+    :emphasize-lines: 1-3
 
     Halloween_Treasure_Hunt:
     type: world
-    debug: true
     events:
 
 .. rst-class:: figurecaption
 
 **Figure 1.1** Our starting world script container
 
-It's worth noting that Denizen scripts follow **YAML**'s indentation rules, with either *2 or 4-space tabs*. Many text 
-editors can be used for writing these scripts, but we personally prefer **Notepad++**. You just have to make sure the 
-tabs are replaced with actual spaces. There's a settings option in that automatically does that for us, so no problem.
-
 Now we need to find an event that fits our case. Looking through the *event list* documentation, ``on player clicks 
 block`` looks like our best bet. We just have to adjust it for our specific use case by adding *optional* arguments. 
 According to the event syntax, it accepts a click type, a material and an area, which will just be ``left``, 
-``pumpkin`` and ``in Hub`` respectively.
+``carved_pumpkin`` and ``in Hub`` respectively.
 
 .. note::
     This tutorial assumes our *Hub world* is in fact called ``Hub``.
@@ -84,15 +76,14 @@ argument. We feel the hype, so we'll go with a ``- narrate "yay"``.
 Our script should be the following at this point:
 
 .. code-block:: dscript
-    :name: figure_1_2
+    :name: figureDIY_1_2
     :linenos:
-    :emphasize-lines: 5,6
+    :emphasize-lines: 4,5
 
     Halloween_Treasure_Hunt:
     type: world
-    debug: true
     events:
-      on player left clicks pumpkin in Hub:
+      on player left clicks carved_pumpkin in Hub:
       - narrate "yay"
 
 .. rst-class:: figurecaption
@@ -100,13 +91,13 @@ Our script should be the following at this point:
 **Figure 1.2** Our world script with a specific event
 
 It's time to *save* the script file, *reload* scripts ingame with ``/denizen reload scripts`` and *trigger the event* 
-by left clicking a pumpkin block in our Hub world. We should now be able to see a cute little ``yay`` in chat, along 
-with some debug information in the console, just as we expected. That's great, but we also have to *test* and make 
-sure the event is not being triggered when clicking other types of blocks, when right clicking, or when clicking in 
-another world.
+by left clicking a carved pumpkin block in our Hub world. We should now be able to see a cute little ``yay`` in chat, 
+along with some debug information in the console, just as we expected. That's great, but we also have to *test* and 
+make sure the event is not being triggered when clicking other types of blocks, when right clicking, or when clicking 
+in another world.
 
-Core Functionality
-==================
+2. Core Functionality
+=====================
 
 We're ready to move further ahead and actually give a *reward* to the player clicking the block. Since we're nice 
 server owners, the prize will be a free *diamond*. This is where the :guilabel:`give` command comes in handy. Its 
@@ -123,29 +114,28 @@ give the diamond to, as the command will target the linked player by default. Th
 event. The full command line will then be ``- give diamond``.
 
 Now it's time to make sure it works. After *saving* and *reloading* scripts again, it should be giving us a *diamond* 
-every time we click the *pumpkin*. While players will totally love this, we should probably avoid giving out unlimited 
-diamonds. That's easy to fix though, we just have to *remove* the pumpkin once it's clicked. If we do it before even 
-giving out the reward, we'll make sure it won't be clicked twice. 
+every time we click the *carved pumpkin*. While players will totally love this, we should probably avoid giving out 
+unlimited diamonds. That's easy to fix though, we just have to *remove* the carved pumpkin once it's clicked. If we do 
+it before even giving out the reward, we'll make sure it won't be clicked twice. 
 
 For this, we'll use the :guilabel:`modifyblock` command, which lets us specify a *location* and a *material*. Now we 
 only need to know which location was clicked by the player. Time to make use of *context* tags! This kind of tags are 
 event specific and will let us retrieve useful information from said event. If we check again the event's 
 documentation, we can see it has a ``<context.location>`` tag available, which is just what we needed for the first 
-argument. The material, on the other hand, will be just ``air`` as we want to remove the original pumpkin. The full 
-command line will then be ``- modifyblock <context.location> air``.
+argument. The material, on the other hand, will be just ``air`` as we want to remove the original carved pumpkin. The 
+full command line will then be ``- modifyblock <context.location> air``.
 
 Our script with these new commands should look like this:
 
 .. code-block:: dscript
-    :name: figure_1_3
+    :name: figureDIY_1_3
     :linenos:
-    :emphasize-lines: 7,8
+    :emphasize-lines: 6,7
 
     Halloween_Treasure_Hunt:
     type: world
-    debug: true
     events:
-      on player left clicks pumpkin in Hub:
+      on player left clicks carved_pumpkin in Hub:
       - narrate "yay"
       - modifyblock <context.location> air
       - give diamond
@@ -156,20 +146,21 @@ Our script with these new commands should look like this:
 
 Rinse and repeat: save, reload scripts and do a quick test. Amazing! This deserves a "yay". Speaking of yays… we don't 
 need to narrate ``yay`` for testing purposes anymore, so we better change it to something more informative. Something 
-like ``- narrate "You've found a pumpkin! Here's your reward!"`` sounds like the way to go.
+like ``- narrate "You've found a carved pumpkin! Here's your reward!"`` sounds like the way to go.
 
-Topping It Off
-==============
+3. Topping It Off
+=================
 
 Let's make it even more fun. What if *jack o' lanterns* gave a diamond to *every online player*? Yeah, we can make 
 that happen too! Let's start by making a copy of the event we already have and its contents. We should now change the 
-``pumpkin`` material of said event to ``jack_o_lantern``, so it's only triggered when clicking jack o' lantern blocks.
+``carved_pumpkin`` material of said event to ``jack_o_lantern``, so it's only triggered when clicking jack o' lantern 
+blocks.
 
 .. note::
-    There are other ways to achieve the same result. For example, a single general event that is triggered for every 
-    block clicked could be used. This would mean filtering the needed blocks with logic afterwards, usually with 
-    **if/else if/else** trees or **choose** commands. In this guide though, two separate events will be used as that 
-    can help keep it simple without functionality.
+    There are other ways to achieve the same result. For example, a single general event that is triggered for both 
+    carved pumpkin and jack o' lantern blocks being clicked could be used. This would mean filtering the needed blocks 
+    with logic afterwards, usually with **if/else if/else** trees or **choose** commands. In this guide though, two 
+    separate events will be used as that can help keep it simple without losing functionality.
 
 Inside the event, we need to repeat the give command once per player. How to do that? You've guessed it, a loop! In 
 our case, to wrap the :guilabel:`give` command with a :guilabel:`foreach` loop is all we need. This loop takes a 
@@ -184,21 +175,20 @@ and we're ready to go.
 Here's the complete second event:
 
 .. code-block:: dscript
-    :name: figure_1_4
+    :name: figureDIY_1_4
     :linenos:
-    :emphasize-lines: 10-14
+    :emphasize-lines: 9-13
 
     Halloween_Treasure_Hunt:
     type: world
-    debug: true
     events:
-      on player left clicks pumpkin in Hub:
-      - narrate "You've found a pumpkin! Here's your reward!"
+      on player left clicks carved_pumpkin in Hub:
+      - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - give diamond
      
       on player left clicks jack_o_lantern in Hub:
-      - narrate "You've found a pumpkin! Here's your reward!"
+      - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - foreach <server.list_online_players>:
         - give diamond player:<def[value]>
@@ -225,16 +215,16 @@ are shown. No more console *spam*!
 Finally, this is the full script that we've created:
 
 .. code-block:: dscript
-    :name: figure_1_5
+    :name: figureDIY_1_5
     :linenos:
-    :emphasize-lines: 11
+    :emphasize-lines: 3,11
 
     Halloween_Treasure_Hunt:
     type: world
     debug: false
     events:
-      on player left clicks pumpkin in Hub:
-      - narrate "You've found a pumpkin! Here's your reward!"
+      on player left clicks carved_pumpkin in Hub:
+      - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - give diamond
      

@@ -16,7 +16,7 @@ In this first example project, we'll start with the basics. The following topics
 * World script containers, events and context tags.
 * Common script commands and arguments.
 * Constructing tags with simple bases and modifiers.
-* First contact with foreach loops.
+* Basic usage of foreach loops.
 
 If you are not familiar with any of the concepts listed, we suggest revisiting the following tutorial documents:
 
@@ -29,30 +29,28 @@ If you are not familiar with any of the concepts listed, we suggest revisiting t
 This will help you make a better use of this example project, and follow its contents successfully.
 
 .. note::
-    It is also recommended to have the `meta documentation <https://one.denizenscript.com/denizen/logs>`_ open in 
+    It is also recommended to have the `meta documentation`__ open in 
     another tab while scripting this project, as we'll need to check the syntax of events, commands and tags very 
     often.
 
+.. __: https://one.denizenscript.com/denizen/logs
+    
 1. First Steps
 ==============
 
 Now let's jump (or slowly crawl) into the scripting process. In our case, we want to make a **Halloween Treasure 
 Hunt** event in our *Hub world*. We plan on manually placing some hidden pumpkins ourselves, and reward players for 
-finding (and left clicking) them.
-
-First of all, we'll need to create a *new script file* (for example ``Halloween_Treasure_Hunt.yml``) and build a world 
-script container which, as we know, will listen to events happening within our server. We just have to give it a name, 
-like ``Halloween_Treasure_Hunt``, and set the ``type:`` key to ``world``. In addition to this, we'll also add an 
-``events:`` subkey, which will in the end hold the executable code we're going to write.
+finding (and left clicking) them. First of all, we'll need to create a *new script file* (for example 
+``halloween-treasure-hunt.yml``) and build a world  script container which, as we know, will listen to events 
+happening within our server.
 
 Our file with the script container looks like this:
 
 .. code-block:: dscript
     :name: figureDIY_1_1
     :linenos:
-    :emphasize-lines: 1-3
 
-    Halloween_Treasure_Hunt:
+    halloween_treasure_hunt:
     type: world
     events:
 
@@ -61,7 +59,7 @@ Our file with the script container looks like this:
 **Figure 1.1** Our starting world script container
 
 Now we need to find an event that fits our case. Looking through the *event list* documentation, ``on player clicks 
-block`` looks like our best bet. We just have to adjust it for our specific use case by adding *optional* arguments. 
+block`` looks like the best match. We just have to adjust it for our specific use case by adding *optional* arguments. 
 According to the event syntax, it accepts a click type, a material and an area, which will just be ``left``, 
 ``carved_pumpkin`` and ``in Hub`` respectively.
 
@@ -80,7 +78,7 @@ Our script should be the following at this point:
     :linenos:
     :emphasize-lines: 4,5
 
-    Halloween_Treasure_Hunt:
+    halloween_treasure_hunt:
     type: world
     events:
       on player left clicks carved_pumpkin in Hub:
@@ -132,7 +130,7 @@ Our script with these new commands should look like this:
     :linenos:
     :emphasize-lines: 6,7
 
-    Halloween_Treasure_Hunt:
+    halloween_treasure_hunt:
     type: world
     events:
       on player left clicks carved_pumpkin in Hub:
@@ -151,14 +149,14 @@ like ``- narrate "You've found a carved pumpkin! Here's your reward!"`` sounds l
 3. Topping It Off
 =================
 
-Let's make it even more fun. What if *jack o' lanterns* gave a diamond to *every online player*? Yeah, we can make 
-that happen too! Let's start by making a copy of the event we already have and its contents. We should now change the 
-``carved_pumpkin`` material of said event to ``jack_o_lantern``, so it's only triggered when clicking jack o' lantern 
+Let's make it even more fun. What if *jack-o'-lanterns gave a diamond to every online player*? Yeah, we can make that 
+happen too! Let's start by making a copy of the event we already have and its contents. We should now change the 
+``carved_pumpkin`` material of said event to ``jack_o_lantern``, so it's only triggered when clicking jack-o'-lantern 
 blocks.
 
 .. note::
     There are other ways to achieve the same result. For example, a single general event that is triggered for both 
-    carved pumpkin and jack o' lantern blocks being clicked could be used. This would mean filtering the needed blocks 
+    carved pumpkin and jack-o'-lantern blocks being clicked could be used. This would mean filtering the needed blocks 
     with logic afterwards, usually with **if/else if/else** trees or **choose** commands. In this guide though, two 
     separate events will be used as that can help keep it simple without losing functionality.
 
@@ -179,7 +177,7 @@ Here's the complete second event:
     :linenos:
     :emphasize-lines: 9-13
 
-    Halloween_Treasure_Hunt:
+    halloween_treasure_hunt:
     type: world
     events:
       on player left clicks carved_pumpkin in Hub:
@@ -207,7 +205,7 @@ problem at all. As we already know, all events related to players let you access
     Double quotes (``" "``) are used to group text so it's treated as a *single argument*. This is specially useful for 
     commands based on chat text, such as :guilabel:`narrate` and :guilabel:`announce`.
 
-Our command would be as easy as ``- announce "<player.name> has found a jack o' lantern. Everybody gets a reward!"``. 
+Our command would be as easy as ``- announce "<player.name> has found a jack-o'-lantern. Everybody gets a reward!"``. 
 We only have to replace the old narrate command in the second event with our new announce. Now we just have to make 
 sure it *works as intended* after reloading, and finally set the ``debug:`` key to ``false`` so only error messages 
 are shown. No more console *spam*!
@@ -219,7 +217,7 @@ Finally, this is the full script that we've created:
     :linenos:
     :emphasize-lines: 3,11
 
-    Halloween_Treasure_Hunt:
+    halloween_treasure_hunt:
     type: world
     debug: false
     events:
@@ -229,7 +227,7 @@ Finally, this is the full script that we've created:
       - give diamond
      
       on player left clicks jack_o_lantern in Hub:
-      - announce "<player.name> has found a jack o' lantern. Everybody gets a reward!"
+      - announce "<player.name> has found a jack-o'-lantern. Everybody gets a reward!"
       - modifyblock <context.location> air
       - foreach <server.list_online_players>:
         - give diamond player:<def[value]>

@@ -46,7 +46,7 @@ Contents
     :titlesonly:
     :caption: References
 
-    docs/glossary    
+    docs/glossary
 
 Updates to This Text Tutorial
 =============================

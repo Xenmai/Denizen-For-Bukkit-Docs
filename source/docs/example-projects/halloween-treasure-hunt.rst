@@ -30,8 +30,9 @@ If you are not familiar with any of the concepts listed, we suggest revisiting t
 This will help you make a better use of this example project, and follow its contents successfully.
 
 .. note::
-    It is also recommended to have the `meta documentation <https://one.denizenscript.com/denizen/logs>`_ open in another tab while scripting this project, as we'll 
-    need to check the syntax of events, commands and tags very often.
+    It is also recommended to have the `meta documentation <https://one.denizenscript.com/denizen/logs>`_ open in 
+    another tab while scripting this project, as we'll need to check the syntax of events, commands and tags very 
+    often.
 
 First Steps
 ===========
@@ -165,10 +166,10 @@ that happen too! Let's start by making a copy of the event we already have and i
 ``pumpkin`` material of said event to ``jack_o_lantern``, so it's only triggered when clicking jack o' lantern blocks.
 
 .. note::
-    There are other ways to achieve this event logic. For example, we could use a single general event that triggers 
-    for every block clicked, and filter the needed blocks with logic, such as **if/else if/else** trees or **choose** 
-    commands. In this guide though, two separate events will be used as we feel that can help keep it simple without 
-    losing functionality.
+    There are other ways to achieve the same result. For example, a single general event that is triggered for every 
+    block clicked could be used. This would mean filtering the needed blocks with logic afterwards, usually with 
+    **if/else if/else** trees or **choose** commands. In this guide though, two separate events will be used as that 
+    can help keep it simple without functionality.
 
 Inside the event, we need to repeat the give command once per player. How to do that? You've guessed it, a loop! In 
 our case, to wrap the :guilabel:`give` command with a :guilabel:`foreach` loop is all we need. This loop takes a 
@@ -207,8 +208,8 @@ Here's the complete second event:
 **Figure 1.4** Our world script with a second event
 
 We also have to let all the players know who their new *hero* is, and instead of narrating to them one by one, we can 
-just announce the message to the whole server. According to the :guilabel:`announce` command syntax, it only requires one 
-argument: the message. We just want to know the *name* of the player who found the hidden block , but that's not a 
+just announce the message to the whole server. According to the :guilabel:`announce` command syntax, it only requires 
+one argument: the message. We just want to know the *name* of the player who found the hidden block , but that's not a 
 problem at all. As we already know, all events related to players let you access their linked player with the 
 ``<player>`` tag. In our case, we need their actual name, so we will just add ``.name`` to the tag.
 

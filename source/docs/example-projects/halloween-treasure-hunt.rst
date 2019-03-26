@@ -29,9 +29,8 @@ If you are not familiar with any of the concepts listed, we suggest revisiting t
 This will help you make a better use of this example project, and follow its contents successfully.
 
 .. note::
-    It is also recommended to have the `meta documentation`__ open in 
-    another tab while scripting this project, as we'll need to check the syntax of events, commands and tags very 
-    often.
+    It is also recommended to have the `meta documentation`__ open in another tab while scripting this project, as 
+    we'll need to check the syntax of events, commands and tags very often.
 
 .. __: https://one.denizenscript.com/denizen/logs
     
@@ -58,18 +57,20 @@ Our file with the script container looks like this:
 
 **Figure 1.1** Our starting world script container
 
-Now we need to find an event that fits our case. Looking through the *event list* documentation, ``on player clicks 
-block`` looks like the best match. We just have to adjust it for our specific use case by adding *optional* arguments. 
+Now we need to find an event that fits our case. Looking through the *event list* documentation, `on player clicks 
+block`__ looks like the best match. We just have to adjust it for our specific use case by adding *optional* arguments. 
 According to the event syntax, it accepts a click type, a material and an area, which will just be ``left``, 
 ``carved_pumpkin`` and ``in Hub`` respectively.
+
+.. __: https://one.denizenscript.com/denizen/evts/clicks%20block
 
 .. note::
     This tutorial assumes our *Hub world* is in fact called ``Hub``.
 
 We'll just make sure it works for now, so we add it under the events key and end the line with a ``:``. Inside this 
 event we can place our first command. A good option for testing purposes is just to show a word in *chat*. The command 
-for this is :guilabel:`narrate`. As the documentation explains, its syntax is very simple, only requiring a message 
-argument. We feel the hype, so we'll go with a ``- narrate "yay"``.
+for this is :guilabel:`narrate`. AIts syntax is very simple, only requiring a message argument. We feel the hype, so 
+we'll go with a ``- narrate "yay"``.
 
 Our script should be the following at this point:
 
@@ -103,25 +104,25 @@ server owners, the prize will be a free *diamond*. This is where the :guilabel:`
 is a diamond item, so we can ignore the *money* and *xp* options.
 
 .. note::
-    When reading command documentation, It's important to keep in mind that anything inside ``< >`` is *not literal* 
-    and needs to be replaced. Arguments enclosed in ``[ ]`` are *required*, while ``( )`` means an argument is 
-    *optional*. The ``/`` symbol separates argument *options*, meaning you have to choose one of them.
+    If you need help with reading the command documentation, refer to this link: `command syntax`__.
 
+.. __: https://one.denizenscript.com/denizen/lngs/syntax".    
+    
 Let's go ahead and specify ``diamond`` as the first argument of our give command. We don't have to worry about who to 
 give the diamond to, as the command will target the linked player by default. That is, the player that triggered the 
 event. The full command line will then be ``- give diamond``.
 
-Now it's time to make sure it works. After *saving* and *reloading* scripts again, it should be giving us a *diamond* 
-every time we click the *carved pumpkin*. While players will totally love this, we should probably avoid giving out 
-unlimited diamonds. That's easy to fix though, we just have to *remove* the carved pumpkin once it's clicked. If we do 
-it before even giving out the reward, we'll make sure it won't be clicked twice. 
+Now it's time to make sure it works. After saving and reloading scripts again, it should be giving us a diamond *every 
+time we click the carved pumpkin*. While players will totally love this, we should probably avoid giving out unlimited 
+diamonds. That's easy to fix though, we just have to *remove the carved pumpkin once it's clicked*. If we do it before 
+even giving out the reward, we'll make sure it won't be clicked twice. 
 
 For this, we'll use the :guilabel:`modifyblock` command, which lets us specify a *location* and a *material*. Now we 
-only need to know which location was clicked by the player. Time to make use of *context* tags! This kind of tags are 
-event specific and will let us retrieve useful information from said event. If we check again the event's 
-documentation, we can see it has a ``<context.location>`` tag available, which is just what we needed for the first 
-argument. The material, on the other hand, will be just ``air`` as we want to remove the original carved pumpkin. The 
-full command line will then be ``- modifyblock <context.location> air``.
+only need to know which location was clicked by the player. Time to make use of *context tags*! If you aren't familiar 
+with them already, you should make sure to revisit the sections where they are covered, **[TODO: Add CONTEXT TAGS section reference]**.
+In this case we'll use a simple ``<context.location>`` tag, which is just what we needed for the first argument. The 
+material, on the other hand, will be just ``air`` as we want to remove the original carved pumpkin. The full command 
+line will then be ``- modifyblock <context.location> air``.
 
 Our script with these new commands should look like this:
 
@@ -161,14 +162,13 @@ blocks.
     separate events will be used as that can help keep it simple without losing functionality.
 
 Inside the event, we need to repeat the give command once per player. How to do that? You've guessed it, a loop! In 
-our case, to wrap the :guilabel:`give` command with a :guilabel:`foreach` loop is all we need. This loop takes a 
-*list* when it starts and executes some commands for *every object* on the list. We just need to feed it the list of 
-online players, which can be accessed through ``<server.list_online_players>``.
+our case, to wrap the :guilabel:`give` command with a :guilabel:`foreach` loop is all we need. We just need to feed it 
+the list of online players, which can be accessed through ``<server.list_online_players>``.
 
-Inside the :guilabel:`foreach` command block, we can retrieve the currently *looped object* with ``<def[value]>``. 
-We'll use this player object to tell the give command who to target. This can easily be done by setting the linked 
-player of said command, possible thanks to the ``player:`` argument. Feed this argument the tag we've just mentioned 
-and we're ready to go.
+Ad a reminder, we can retrieve the *currently looped object* inside the :guilabel:`foreach` command block with 
+``<def[value]>``. We'll use this player object to tell the give command who to target. This can easily be done by 
+setting the linked player of said command, possible thanks to the ``player:`` argument. Feed this argument the tag 
+we've just mentioned and we're ready to go.
 
 Here's the complete second event:
 

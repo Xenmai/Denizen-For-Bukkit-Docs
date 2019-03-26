@@ -39,7 +39,7 @@ This will help you make a better use of this example project, and follow its con
 
 Now let's jump (or slowly crawl) into the scripting process. In our case, we want to make a **Halloween Treasure 
 Hunt** event in our *Hub world*. We plan on manually placing some hidden pumpkins ourselves, and reward players for 
-finding (and left clicking) them. First of all, we'll need to create a *new script file* (for example 
+finding (and left clicking) them. First of all, we'll need to *create a new script file* (for example 
 ``halloween-treasure-hunt.yml``) and build a world  script container which, as we know, will listen to events 
 happening within our server.
 
@@ -57,20 +57,20 @@ Our file with the script container looks like this:
 
 **Figure 1.1** Our starting world script container
 
-Now we need to find an event that fits our case. Looking through the *event list* documentation, `on player clicks 
-block`__ looks like the best match. We just have to adjust it for our specific use case by adding *optional* arguments. 
-According to the event syntax, it accepts a click type, a material and an area, which will just be ``left``, 
-``carved_pumpkin`` and ``in Hub`` respectively.
+Now we need to find an event that fits our case. Looking through the event list documentation, `on player clicks 
+block`__ looks like the best match. We just have to adjust it for our specific use case by adding optional arguments. 
+According to the event syntax, it accepts a click type, a material and an area switch, which will just be ``left``, 
+``carved_pumpkin`` and ``in:Hub`` respectively.
 
 .. __: https://one.denizenscript.com/denizen/evts/clicks%20block
 
 .. note::
     This tutorial assumes our *Hub world* is in fact called ``Hub``.
 
-We'll just make sure it works for now, so we add it under the events key and end the line with a ``:``. Inside this 
-event we can place our first command. A good option for testing purposes is just to show a word in *chat*. The command 
-for this is :guilabel:`narrate`. AIts syntax is very simple, only requiring a message argument. We feel the hype, so 
-we'll go with a ``- narrate "yay"``.
+We'll just make sure it works for now, so we add the event to our world script. Inside this event we can place our 
+first command. A good option for testing purposes is just to show a word in chat, as well as checking out the console 
+for debug information. The command for this is :guilabel:`narrate`. Its syntax is very simple, only requiring a 
+message argument. We feel the hype, so we'll go with a ``- narrate "yay"``.
 
 Our script should be the following at this point:
 
@@ -82,26 +82,26 @@ Our script should be the following at this point:
     halloween_treasure_hunt:
     type: world
     events:
-      on player left clicks carved_pumpkin in Hub:
+      on player left clicks carved_pumpkin in:Hub:
       - narrate "yay"
 
 .. rst-class:: figurecaption
 
 **Figure 1.2** Our world script with a specific event
 
-It's time to *save* the script file, *reload* scripts ingame with ``/denizen reload scripts`` and *trigger the event* 
-by left clicking a carved pumpkin block in our Hub world. We should now be able to see a cute little ``yay`` in chat, 
-along with some debug information in the console, just as we expected. That's great, but we also have to *test* and 
-make sure the event is not being triggered when clicking other types of blocks, when right clicking, or when clicking 
-in another world.
+It's time to save the script file, reload scripts ingame with ``/denizen reload scripts`` and trigger the event by 
+left clicking a carved pumpkin block in our Hub world. We should now be able to see a cute little ``yay`` in chat, 
+along with some debug information in the console, just as we expected. That's great, but you should also test and make 
+sure the event is not being triggered when clicking other types of blocks, when right clicking, or when clicking in 
+another world.
 
 2. Core Functionality
 =====================
 
-We're ready to move further ahead and actually give a *reward* to the player clicking the block. Since we're nice 
-server owners, the prize will be a free *diamond*. This is where the :guilabel:`give` command comes in handy. Its 
-*syntax* specifies a single required argument: ``[money/xp/<item>|...]``. In our case, what we want to give the player 
-is a diamond item, so we can ignore the *money* and *xp* options.
+We're ready to move further ahead and actually give a reward to the player clicking the block. Since we're nice server 
+owners, the prize will be a free diamond. This is where the :guilabel:`give` command comes in handy. Its syntax 
+specifies a single required argument: ``[money/xp/<item>|...]``. In our case, what we want to give the player is a 
+diamond item, so we can ignore the *money* and *xp* options.
 
 .. note::
     If you need help with reading the command documentation, refer to this link: `command syntax`__.
@@ -119,10 +119,10 @@ even giving out the reward, we'll make sure it won't be clicked twice.
 
 For this, we'll use the :guilabel:`modifyblock` command, which lets us specify a *location* and a *material*. Now we 
 only need to know which location was clicked by the player. Time to make use of *context tags*! If you aren't familiar 
-with them already, you should make sure to revisit the sections where they are covered, **[TODO: Add CONTEXT TAGS section reference]**.
-In this case we'll use a simple ``<context.location>`` tag, which is just what we needed for the first argument. The 
-material, on the other hand, will be just ``air`` as we want to remove the original carved pumpkin. The full command 
-line will then be ``- modifyblock <context.location> air``.
+with them already, you should make sure to revisit the sections where they are covered, 
+**[TODO: Add CONTEXT TAGS section reference]**. In this case we'll use a simple ``<context.location>`` tag, which is 
+just what we needed for the first argument. The material, on the other hand, will be just ``air`` as we want to remove 
+the original carved pumpkin. The full command line will then be ``- modifyblock <context.location> air``.
 
 Our script with these new commands should look like this:
 
@@ -134,7 +134,7 @@ Our script with these new commands should look like this:
     halloween_treasure_hunt:
     type: world
     events:
-      on player left clicks carved_pumpkin in Hub:
+      on player left clicks carved_pumpkin in:Hub:
       - narrate "yay"
       - modifyblock <context.location> air
       - give diamond
@@ -180,12 +180,12 @@ Here's the complete second event:
     halloween_treasure_hunt:
     type: world
     events:
-      on player left clicks carved_pumpkin in Hub:
+      on player left clicks carved_pumpkin in:Hub:
       - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - give diamond
      
-      on player left clicks jack_o_lantern in Hub:
+      on player left clicks jack_o_lantern in:Hub:
       - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - foreach <server.list_online_players>:
@@ -221,12 +221,12 @@ Finally, this is the full script that we've created:
     type: world
     debug: false
     events:
-      on player left clicks carved_pumpkin in Hub:
+      on player left clicks carved_pumpkin in:Hub:
       - narrate "You've found a carved pumpkin! Here's your reward!"
       - modifyblock <context.location> air
       - give diamond
      
-      on player left clicks jack_o_lantern in Hub:
+      on player left clicks jack_o_lantern in:Hub:
       - announce "<player.name> has found a jack-o'-lantern. Everybody gets a reward!"
       - modifyblock <context.location> air
       - foreach <server.list_online_players>:
